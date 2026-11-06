@@ -245,12 +245,12 @@ $("printBtn").addEventListener("click", () => {
   if (!certificate.classList.contains("show")) return;
   window.print();
 });
+
+document.addEventListener("contextmenu", function(event) {
+  event.preventDefault();
+});
 </script>
+
 </body>
- <script>
-  // منع قائمة كليك يمين
-  document.addEventListener("contextmenu", function(event) {
-    event.preventDefault();
-  });
-</script>
+
 </html>
