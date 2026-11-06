@@ -1,454 +1,599 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#10283f">
-<title>شهادات التميز والتقدير</title>
+<title>شهادات التميز - الحاسب الآلي</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;700;800&family=Reem+Kufi:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
-:root{--navy:#10283f;--navy2:#193c59;--gold:#bd984d;--gold2:#e4ca86;--ink:#263344;--muted:#687789;--paper:#fffdf6;--line:#e6dcc3;--bg:#edf1f5;--white:#fff;--danger:#a33333;--success:#22664b}
-*{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at top,#f8fafc 0,#edf1f5 65%);color:var(--ink);font-family:"Cairo",sans-serif;min-height:100vh;padding:34px 16px 56px}
-.wrap{width:min(100%,900px);margin:auto;display:grid;gap:22px}
-header{text-align:center;padding:8px 12px 2px}
-.eyebrow{display:inline-flex;align-items:center;gap:9px;color:#947332;font-size:13px;font-weight:800;letter-spacing:.04em}
-.eyebrow:before,.eyebrow:after{content:"";width:28px;height:1px;background:var(--gold)}
-h1{font-family:"Reem Kufi","Cairo",sans-serif;color:var(--navy);font-size:clamp(27px,5vw,42px);line-height:1.35;margin:8px 0}
-.lead{color:var(--muted);margin:0}
-.panel{background:var(--white);border:1px solid #e0e6ec;border-radius:20px;padding:clamp(18px,4vw,30px);box-shadow:0 14px 38px #193c5910}
-.form-title{font-weight:800;color:var(--navy);margin:0 0 14px}
-label{display:block;font-weight:700;font-size:14px;margin-bottom:7px}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.field input{width:100%;height:51px;border:1px solid #d7dfe7;border-radius:11px;background:#f9fbfd;padding:0 14px;font:inherit;color:var(--ink);outline:none;transition:.2s}
-.field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #bd984d22}
-.actions{display:flex;gap:10px;margin-top:16px}
-button{font:inherit;cursor:pointer}
-.primary,.secondary{border:0;border-radius:11px;padding:12px 22px;font-weight:800;transition:transform .15s,opacity .15s}
-.primary{background:linear-gradient(135deg,var(--navy),var(--navy2));color:white;box-shadow:0 7px 16px #10283f25;flex:1}
-.secondary{background:#f3f5f7;color:var(--navy);border:1px solid #dfe5eb}
-button:hover{transform:translateY(-1px)}button:disabled{opacity:.55;cursor:wait;transform:none}
-.message{min-height:25px;margin:12px 0 0;font-size:14px;font-weight:700;color:var(--danger)}
-.message.ok{color:var(--success)}
-.hint{color:var(--muted);font-size:12px;margin:10px 0 0}
-.certificate{--scale:1;position:relative;overflow:hidden;display:none;aspect-ratio:297/210;background:var(--paper);padding:5.5% 8%;color:#3d321f;box-shadow:0 18px 48px #10283f24}
-.certificate.show{display:block}
-.frame{position:absolute;inset:2.2%;border:2px solid var(--gold);pointer-events:none}
-.frame:before{content:"";position:absolute;inset:7px;border:1px solid #d9c38e}
-.frame:after{content:"";position:absolute;inset:15px;border:1px dashed #d9c38e}
-.corner{position:absolute;width:82px;height:82px;border-color:var(--gold);border-style:solid;z-index:1}
-.tl{top:2.2%;left:2.2%;border-width:3px 0 0 3px}.tr{top:2.2%;right:2.2%;border-width:3px 3px 0 0}
-.bl{bottom:2.2%;left:2.2%;border-width:0 0 3px 3px}.br{bottom:2.2%;right:2.2%;border-width:0 3px 3px 0}
-.cert-inner{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center}
-.cert-kicker{font-size:clamp(9px,1.3vw,15px);color:#8d7138;font-weight:700;letter-spacing:0;word-spacing:0;white-space:nowrap;direction:rtl;text-align:center}
-.cert-title{font-family:"Amiri",serif;font-size:clamp(28px,5.5vw,58px);line-height:1.05;color:var(--navy);margin:3px 0 0}
-.gold-rule{display:flex;align-items:center;gap:12px;width:min(42%,250px);margin:7px auto}
-.gold-rule:before,.gold-rule:after{content:"";height:1px;background:var(--gold);flex:1}
-.gold-rule span{width:8px;height:8px;background:var(--gold);transform:rotate(45deg)}
-.present{font-family:"Amiri",serif;font-size:clamp(13px,2vw,21px);margin:0;color:#796744}
-.student-name{font-family:"Amiri",serif;font-weight:700;font-size:clamp(24px,4.7vw,48px);color:#8b6726;margin:1px 0 0;padding:0 16px 5px;border-bottom:1px solid var(--gold);max-width:90%;overflow-wrap:anywhere}
-.reason{font-family:"Amiri",serif;font-size:clamp(13px,2vw,21px);line-height:1.6;margin:0;max-width:82%}
-.cert-bottom{width:100%;display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:12px;margin-top:5px}
-.sign{font-family:"Cairo",sans-serif;font-size:clamp(9px,1.35vw,14px);color:#5e5138}
-.sign strong{display:block;border-top:1px solid var(--gold);padding-top:5px;margin-top:7px;font-size:clamp(10px,1.5vw,15px);color:var(--navy)}
-.medal{width:clamp(54px,9vw,90px);height:clamp(54px,9vw,90px);border:4px double var(--gold);outline:1px solid #d8c18b;outline-offset:4px;border-radius:50%;display:grid;place-content:center;color:#a17a2e;background:radial-gradient(circle,#fff8df,#f0dfad);font-size:clamp(9px,1.5vw,15px);font-weight:800;line-height:1.35}
-.meta{font-size:clamp(8px,1.2vw,12px);color:#8b7957;margin-top:6px}
-.cert-code{font-weight:800;letter-spacing:.06em;color:#6e592e}
-.pdf-row{display:none;text-align:center}.pdf-row.show{display:block}
-.pdf{background:var(--gold);color:#fff;border:0;border-radius:11px;padding:12px 25px;font-weight:800}
-.foot{text-align:center;color:#8793a0;font-size:12px}
-
-/* تحسينات شكل الشهادة */
-.certificate{
-  background:
-    radial-gradient(ellipse at 50% 45%, rgba(255,255,255,.96) 0%, rgba(255,253,246,.98) 58%, #f8f0dc 100%);
-  border:1px solid #d8c18b;
-}
-.certificate:before{
-  content:"";
-  position:absolute;
-  width:360px;
-  height:360px;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  border:1px solid rgba(189,152,77,.10);
-  border-radius:50%;
-  box-shadow:0 0 0 18px rgba(189,152,77,.035),0 0 0 38px rgba(189,152,77,.025);
-  pointer-events:none;
-}
-.frame{border-width:3px}
-.frame:before{inset:8px;border-width:1px}
-.frame:after{inset:17px;border-color:rgba(189,152,77,.65)}
-.corner{width:92px;height:92px;border-color:#b58d43}
-.cert-inner{gap:7px}
-.cert-kicker{
-  display:inline-block;
-  padding:4px 24px;
-  border-top:1px solid rgba(189,152,77,.65);
-  border-bottom:1px solid rgba(189,152,77,.65);
-  color:#86672e;
-  letter-spacing:0;
-  white-space:nowrap;
-}
-.cert-title{
-  text-shadow:0 2px 0 rgba(189,152,77,.12);
-  margin-top:7px;
-}
-.gold-rule{margin:10px auto 13px}
-.present{color:#75613e}
-.student-name{
-  display:inline-block;
-  min-width:44%;
-  padding:5px 22px 8px;
-  border:1px solid rgba(189,152,77,.58);
-  border-radius:12px;
-  background:linear-gradient(180deg,rgba(255,248,224,.82),rgba(255,255,255,.72));
-  box-shadow:0 4px 12px rgba(117,87,35,.07);
-  margin-top:8px;
-}
-.reason{
-  padding:7px 18px;
-  border-right:2px solid rgba(189,152,77,.55);
-  border-left:2px solid rgba(189,152,77,.55);
-  color:#51452f;
-}
-.cert-bottom{
-  border-top:1px solid rgba(189,152,77,.35);
-  padding-top:12px;
-}
-.medal{
-  box-shadow:0 3px 10px rgba(117,87,35,.12),inset 0 0 0 4px rgba(255,255,255,.38);
-}
-.sign strong{color:#193c59}
-
-.cert-kicker{letter-spacing:normal!important;word-spacing:normal!important}
-.cert-kicker-svg{display:block;width: min(440px, 100%);height:48px;overflow:visible;letter-spacing:normal}
-.cert-kicker-svg text{letter-spacing:normal;word-spacing:normal}
-
-@media(max-width:620px){
-  .corner{width:42px;height:42px}
-  .student-name{min-width:55%;padding:4px 10px 6px}
-  .reason{padding:5px 8px}
+:root {
+  --navy: #08243c;
+  --teal: #087b99;
+  --gold: #c99a35;
+  --ink: #132536;
 }
 
-@media(max-width:620px){.fields{grid-template-columns:1fr}.actions{flex-direction:column}.certificate{padding:5% 7%}.corner{width:38px;height:38px}.cert-bottom{gap:5px}.reason{max-width:95%}}
-@media print{
- @page{size:A4 landscape;margin:0}
- html,body{width:297mm;height:210mm;margin:0;padding:0;background:white!important}
- body{print-color-adjust:exact;-webkit-print-color-adjust:exact}
- header,.panel,.pdf-row,.foot{display:none!important}
- .wrap{display:block;width:297mm;height:210mm;margin:0}
- .certificate,.certificate.show{display:block!important;width:297mm;height:210mm;aspect-ratio:auto;box-shadow:none;margin:0;page-break-inside:avoid}
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #edf1f4;
+  color: var(--ink);
+  font-family: "Cairo", Tahoma, Arial, sans-serif;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 28px auto;
+  padding: 0 18px;
+}
+
+.panel {
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 8px 30px #102a3a18;
+  margin-bottom: 22px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  text-align: center;
+  color: var(--navy);
+  font-size: 26px;
+}
+
+.sub {
+  text-align: center;
+  color: #61717c;
+  margin-bottom: 20px;
+}
+
+.search {
+  display: flex;
+  gap: 10px;
+  max-width: 680px;
+  margin: auto;
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #cbd5dc;
+  border-radius: 10px;
+  padding: 13px 15px;
+  font: 600 16px "Cairo", sans-serif;
+  text-align: right;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 22px;
+  background: var(--navy);
+  color: white;
+  font: 700 16px "Cairo", sans-serif;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+#status {
+  text-align: center;
+  min-height: 28px;
+  margin-top: 12px;
+  color: #a33;
+  font-weight: 700;
+}
+
+/* الشهادة */
+
+#certificate {
+  display: none;
+  position: relative;
+  isolation: isolate;
+  background: white;
+  aspect-ratio: 297 / 210;
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  padding: 4.2% 6%;
+  text-align: center;
+}
+
+#certificate:before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid #d8b45e;
+  border-radius: 7px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.corner {
+  position: absolute;
+  width: 32%;
+  height: 34%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.corner.tl {
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    145deg,
+    #05263d 0 48%,
+    #087d9c 49% 62%,
+    #e2b95d 63% 67%,
+    transparent 68%
+  );
+  clip-path: polygon(0 0,100% 0,0 100%);
+}
+
+.corner.br {
+  right: 0;
+  bottom: 0;
+  transform: rotate(180deg);
+  background: linear-gradient(
+    145deg,
+    #05263d 0 48%,
+    #087d9c 49% 62%,
+    #e2b95d 63% 67%,
+    transparent 68%
+  );
+  clip-path: polygon(0 0,100% 0,0 100%);
+}
+
+.flourish {
+  position: absolute;
+  color: #c49a43;
+  font-size: 42px;
+  line-height: 1;
+  opacity: .8;
+}
+
+.flourish.tr {
+  top: 18px;
+  right: 25px;
+}
+
+.flourish.bl {
+  bottom: 18px;
+  left: 25px;
+}
+
+.kicker {
+  font-size: 38px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+
+.ornament {
+  width: 42%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold),
+    transparent
+  );
+  margin: 8px auto 16px;
+  position: relative;
+}
+
+.ornament:after {
+  content: "◆";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  color: var(--gold);
+  background: white;
+  padding: 0 9px;
+}
+
+.intro {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 auto 14px;
+  max-width: 90%;
+  line-height: 1.65;
+}
+
+.name-label {
+  font-size: 23px;
+  font-weight: 800;
+  color: #a88636;
+  margin-top: 5px;
+}
+
+.student {
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--navy);
+  padding: 2px 12px 7px;
+  border-bottom: 3px dotted var(--gold);
+  display: inline-block;
+  min-width: 45%;
+  margin: 2px auto 12px;
+}
+
+.message {
+  font-size: 19px;
+  line-height: 1.7;
+  font-weight: 700;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.wish {
+  display: inline-block;
+  margin: 12px auto 0;
+  padding: 5px 22px;
+  border: 1.5px solid var(--gold);
+  border-radius: 30px;
+  background: #fff8e6;
+  color: var(--navy);
+  font-weight: 800;
+  font-size: 17px;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 12px 8% 0;
+  color: #a77b22;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.sign, .date {
+  min-width: 22%;
+  border-bottom: 2px dotted #c49a43;
+  padding-bottom: 5px;
+}
+
+.seal {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: 7px double #e3b847;
+  background: var(--navy);
+  box-shadow:
+    0 0 0 5px white,
+    0 0 0 7px #d8ad45;
+  display: grid;
+  place-items: center;
+  color: #f3d47d;
+  font-size: 32px;
+  margin: 0 10px;
+}
+
+#downloadBtn {
+  display: none;
+  margin: 18px auto 0;
+  background: #087b69;
+}
+
+@media(max-width:650px) {
+  .search {
+    flex-direction: column;
+  }
+
+  .search button {
+    width: 100%;
+  }
+
+  #certificate {
+    padding: 8% 5%;
+  }
+
+  .bottom {
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+
+  .seal {
+    width: 52px;
+    height: 52px;
+    font-size: 23px;
+  }
+
+  .kicker { font-size: 24px; }
+  .intro { font-size: 12px; }
+  .name-label { font-size: 15px; }
+  .student { font-size: 23px; }
+  .message { font-size: 11px; }
+  .wish { font-size: 10px; }
+  .bottom { font-size: 11px; }
 }
 </style>
 </head>
+
 <body>
-<main class="wrap">
- <header>
-  <div class="eyebrow">التميز يستحق التقدير</div>
-  <h1>شهادات التميز والتقدير</h1>
-  <p class="lead">تهانينا لأبنائنا الطلاب الحاصلين على الدرجة النهائية</p>
- </header>
 
- <section class="panel" aria-label="البحث عن الشهادة">
-  <p class="form-title">ابحث عن شهادتك</p>
-  <form id="lookupForm" autocomplete="off">
-   <div class="fields">
-    <div class="field"><label for="studentName">اسم الطالب الثلاثي</label><input id="studentName" name="studentName" type="text" placeholder="اكتب اسمك الثلاثي كما هو مسجل" required maxlength="100" autocomplete="name"></div>
-   </div>
-   <div class="actions"><button class="primary" id="searchBtn" type="submit">عرض الشهادة</button><button class="secondary" id="clearBtn" type="button">مسح البيانات</button></div>
-   <p class="message" id="message" role="status" aria-live="polite"></p>
-   <p class="hint">اكتبي الاسم الثلاثي كاملًا كما تم تسجيله.</p>
-  </form>
- </section>
+<div class="page">
 
- <section class="certificate" id="certificate" aria-label="شهادة تقدير">
-  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-  <div class="cert-inner">
-   <div>
-    <div class="cert-kicker" aria-label="شهادة استحقاق وتميّز">
-      <svg class="cert-kicker-svg" xmlns="http://www.w3.org/2000/svg" width="440" height="48" viewBox="0 0 440 48" role="img" aria-label="شهادة استحقاق وتميّز">
-       <text x="220" y="33" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Cairo, sans-serif" font-size="22" font-weight="700" fill="#86672e">شهادة استحقاق وتميّز</text>
-      </svg>
-    </div>
-    <h2 class="cert-title">شهادة تقدير</h2>
-    <div class="gold-rule"><span></span></div>
-    <p class="present">تُمنح هذه الشهادة إلى الطالب / الطالبة</p>
-    <p class="student-name" id="certName"></p>
-   </div>
-   <p class="reason" id="certReason"></p>
-   <div class="cert-bottom">
-    <div class="sign"><span id="issueDate"></span><strong>تاريخ الإصدار</strong><div class="meta"></div></div>
-    <div class="medal">★<br>الدرجة<br>النهائية</div>
-    <div class="sign"><span id="teacherName"></span><strong>توقيع المعلمة</strong></div>
-   </div>
-  </div>
- </section>
- <div class="pdf-row" id="pdfRow"><button class="pdf" id="printBtn" type="button">تحميل الشهادة PDF</button></div>
- <div class="foot">مع أطيب التمنيات بدوام النجاح والتفوق</div>
+<section class="panel">
+
+<h1>شهادات التميز – مادة الحاسب الآلي</h1>
+
+<p class="sub">
+اكتبي اسم الطالب الثلاثي كما هو مسجل للحصول على الشهادة
+</p>
+
+<div class="search">
+<input
+  id="studentName"
+  type="text"
+  autocomplete="off"
+  placeholder="اكتب اسم الطالب الثلاثي"
+>
+
+<button id="searchBtn" type="button">
+بحث عن الشهادة
+</button>
+</div>
+
+<div id="status" role="status" aria-live="polite"></div>
+
+</section>
+
+<main id="certificate">
+
+<div class="corner tl"></div>
+<div class="corner br"></div>
+
+<div class="flourish tr">❦</div>
+<div class="flourish bl">❦</div>
+
+<div class="kicker">شهادة استحقاق وتميّز</div>
+
+<div class="ornament"></div>
+
+<p class="intro">
+نتقدم بخالص الشكر والتقدير للطالب/الطالبة،
+تقديرًا لاجتهاده وتميّزه في امتحان شهر أكتوبر
+لمادة الحاسب الآلي.
+</p>
+
+<div class="name-label">
+الطالب / الطالبة
+</div>
+
+<div class="student" id="certificateStudent">
+اسم الطالب
+</div>
+
+<p class="message">
+نفخر بما بذلتموه من جهد وحرص على النجاح والتفوق،
+ونتمنى لكم دوام التميز والإبداع،
+ومزيدًا من الإنجازات والنجاحات.
+</p>
+
+<div class="wish">
+مع أطيب الأمنيات بمستقبل مشرق مليء بالتفوق والنجاح
+</div>
+
+<div class="bottom">
+
+<div class="sign">
+التوقيع<br>
+م/ أسماء مجدي
+</div>
+
+<div class="seal">✦</div>
+
+<div class="date">
+التاريخ<br>
+........................
+</div>
+
+</div>
+
 </main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<button id="downloadBtn" type="button">
+تحميل الشهادة PDF
+</button>
+
+</div>
+
 <script>
-"use strict";
+const SUPABASE_URL =
+"https://yisgyqozrsjbylpumjox.supabase.co";
 
-const SUPABASE_URL = "https://yisgyqozrsjbylpumjox.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IOPSc-va9Y20fcE7HQHKEQ_8HCI_4jn";
-const LOOKUP_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/lookup-certificate`;
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_IOPSc-va9Y20fcE7HQHKEQ_8HCI_4jn";
 
-const CONFIG = {
-  exam: "امتحان شهر أكتوبر",
-  subject: "الحاسب الآلي",
-  term: "أكتوبر",
-  year: "٢٠٢٦",
-  teacher: "م. أسماء مجدي"
-};
+const statusEl = document.getElementById("status");
+const searchBtn = document.getElementById("searchBtn");
+const nameInput = document.getElementById("studentName");
+const certificate = document.getElementById("certificate");
+const certificateStudent = document.getElementById("certificateStudent");
+const downloadBtn = document.getElementById("downloadBtn");
 
-const $ = id => document.getElementById(id);
-const form = $("lookupForm");
-const message = $("message");
-const certificate = $("certificate");
-const pdfRow = $("pdfRow");
-const searchBtn = $("searchBtn");
 
-function safeText(id, value) { $(id).textContent = value; }
-function hideCertificate() {
-  certificate.classList.remove("show");
-  pdfRow.classList.remove("show");
-}
-function showMessage(text, success=false) {
-  message.textContent = text;
-  message.classList.toggle("ok", success);
-}
-function hideMessage() { showMessage(""); }
+async function findCertificate() {
 
-let failures = 0;
-let lockUntil = 0;
-try {
-  const state = JSON.parse(sessionStorage.getItem("certificate-attempts") || "{}");
-  failures = Number(state.failures) || 0;
-  lockUntil = Number(state.lockUntil) || 0;
-} catch (_) {}
+  const name = nameInput.value.trim().replace(/\s+/g, " ");
 
-function saveAttemptState() {
-  try { sessionStorage.setItem("certificate-attempts", JSON.stringify({failures, lockUntil})); } catch (_) {}
-}
-
-form.addEventListener("submit", async event => {
-  event.preventDefault();
-  hideCertificate();
-  hideMessage();
-
-  if (Date.now() < lockUntil) {
-    showMessage("تم إيقاف المحاولة مؤقتًا. انتظري قليلًا ثم حاولي مرة أخرى.");
-    return;
-  }
-
-  const enteredName = $("studentName").value.trim().replace(/\s+/g, " ");
-  if (!enteredName) {
-    showMessage("من فضلك اكتبي الاسم الثلاثي.");
-    return;
-  }
-  if (enteredName.length > 100) {
-    showMessage("الاسم أطول من المسموح. راجعي الاسم وحاولي مرة أخرى.");
+  if (!name) {
+    statusEl.textContent = "من فضلك اكتبي اسم الطالب أولًا.";
+    nameInput.focus();
     return;
   }
 
   searchBtn.disabled = true;
-  searchBtn.textContent = "جارٍ التحقق…";
+  statusEl.style.color = "#536675";
+  statusEl.textContent = "جارٍ البحث...";
+
+  certificate.style.display = "none";
+  downloadBtn.style.display = "none";
 
   try {
-    const response = await fetch(LOOKUP_FUNCTION_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_PUBLISHABLE_KEY
-      },
-      body: JSON.stringify({ name: enteredName })
-    });
 
-    const result = await response.json().catch(() => ({}));
+    const response = await fetch(
+      `${SUPABASE_URL}/functions/v1/lookup-certificate`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_PUBLISHABLE_KEY
+        },
+        body: JSON.stringify({ name })
+      }
+    );
 
-    if (response.status === 404) {
-      failures++;
-      if (failures >= 5) lockUntil = Date.now() + Math.min(30000 * (failures - 4), 300000);
-      saveAttemptState();
-      showMessage("لم يتم العثور على شهادة بهذا الاسم. راجعي كتابة الاسم الثلاثي.");
-      return;
+    if (!response.ok) {
+      throw new Error("تعذر الاتصال بالخدمة. حاولي مرة أخرى.");
     }
 
-    if (!response.ok) throw new Error("تعذر التحقق من الشهادة الآن.");
+    const result = await response.json();
 
-    const studentName = result?.student?.name;
-    if (!studentName) throw new Error("استجابة التحقق غير مكتملة.");
+    if (
+      result &&
+      result.found &&
+      result.student &&
+      result.student.name
+    ) {
 
-    failures = 0;
-    lockUntil = 0;
-    saveAttemptState();
+      certificateStudent.textContent = result.student.name;
 
-    safeText("certName", studentName);
-    safeText("certReason", `وذلك تقديرًا لتحقيق الدرجة النهائية في مادة ${CONFIG.subject} — ${CONFIG.exam} (${CONFIG.term} ${CONFIG.year})`);
-    safeText("teacherName", CONFIG.teacher);
-    safeText("issueDate", new Intl.DateTimeFormat("ar-EG", {day:"numeric",month:"long",year:"numeric"}).format(new Date()));
+      statusEl.textContent = "تم العثور على الشهادة بنجاح.";
+      statusEl.style.color = "#087b69";
 
-    certificate.classList.add("show");
-    pdfRow.classList.add("show");
-    showMessage("تم التحقق بنجاح. مبارك التفوق!", true);
-    certificate.scrollIntoView({behavior:"smooth", block:"center"});
-  } catch (error) {
-    showMessage(error.message || "حدث خطأ في الاتصال. حاولي مرة أخرى.");
-  } finally {
-    searchBtn.disabled = false;
-    searchBtn.textContent = "عرض الشهادة";
-  }
-});
+      certificate.style.display = "block";
+      downloadBtn.style.display = "block";
 
-$("clearBtn").addEventListener("click", () => {
-  form.reset();
-  hideCertificate();
-  hideMessage();
-  $("studentName").focus();
-});
-
-/* إنشاء PDF بصورة واحدة بمقاس A4 أفقي ثابت على الكمبيوتر والموبايل */
-$("printBtn").addEventListener("click", async () => {
-  if (!certificate.classList.contains("show")) {
-    showMessage("اعرضي الشهادة أولًا.");
-    return;
-  }
-
-  const button = $("printBtn");
-  const studentName = $("certName").textContent.trim() || "student";
-  let exportNode = null;
-  let exportStage = null;
-
-  button.disabled = true;
-  button.textContent = "جارٍ تجهيز الشهادة...";
-
-  try {
-    if (typeof window.html2canvas !== "function") {
-      throw new Error("تعذر تحميل مكتبة تصوير الشهادة. تأكدي من الإنترنت ثم أعيدي تحميل الصفحة.");
-    }
-    if (!window.jspdf || typeof window.jspdf.jsPDF !== "function") {
-      throw new Error("تعذر تحميل مكتبة إنشاء PDF. تأكدي من الإنترنت ثم أعيدي تحميل الصفحة.");
-    }
-
-    if (document.fonts && document.fonts.ready) {
-      await document.fonts.ready;
-    }
-
-    // مساحة تصدير ثابتة لا تتأثر بعرض شاشة الهاتف أو الكمبيوتر
-    exportStage = document.createElement("div");
-    Object.assign(exportStage.style, {
-      position: "fixed",
-      left: "0",
-      top: "0",
-      width: "1122px",
-      height: "794px",
-      overflow: "hidden",
-      background: "#fffdf6",
-      zIndex: "2147483647",
-      opacity: "1",
-      pointerEvents: "none"
-    });
-
-    exportNode = certificate.cloneNode(true);
-    exportNode.classList.add("show");
-
-    Object.assign(exportNode.style, {
-      display: "block",
-      position: "relative",
-      left: "auto",
-      top: "auto",
-      width: "1122px",
-      height: "794px",
-      minWidth: "1122px",
-      maxWidth: "1122px",
-      aspectRatio: "auto",
-      margin: "0",
-      padding: "62px 90px",
-      overflow: "hidden",
-      boxSizing: "border-box",
-      boxShadow: "none",
-      background: "#fffdf6",
-      color: "#3d321f",
-      transform: "none"
-    });
-
-    // تثبيت أحجام الخطوط حتى لا يتغير شكل الشهادة على الهاتف
-    const fixedStyles = [
-      [".cert-kicker", {fontSize:"20px", letterSpacing:"normal", wordSpacing:"normal", whiteSpace:"nowrap", direction:"rtl", textAlign:"center", fontFamily:"Cairo, sans-serif", padding:"4px 24px", borderTop:"1px solid rgba(189,152,77,.65)", borderBottom:"1px solid rgba(189,152,77,.65)"}],
-      [".cert-title", {fontSize:"58px", lineHeight:"1.05"}],
-      [".present", {fontSize:"23px"}],
-      [".student-name", {fontSize:"50px", maxWidth:"90%"}],
-      [".reason", {fontSize:"22px", lineHeight:"1.6", maxWidth:"82%"}],
-      [".sign", {fontSize:"15px"}],
-      [".sign strong", {fontSize:"16px"}],
-      [".medal", {width:"90px", height:"90px", fontSize:"15px"}],
-      [".corner", {width:"82px", height:"82px"}]
-    ];
-
-    fixedStyles.forEach(([selector, styles]) => {
-      exportNode.querySelectorAll(selector).forEach(element => {
-        Object.assign(element.style, styles);
+      certificate.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
       });
-    });
 
-    exportStage.appendChild(exportNode);
-    document.body.appendChild(exportStage);
+    } else {
 
-    // انتظار دورة رسم حتى يكتمل ظهور النصوص والحدود
-    await new Promise(resolve => requestAnimationFrame(() =>
-      requestAnimationFrame(resolve)
-    ));
+      statusEl.textContent =
+        result?.message ||
+        "لم يتم العثور على الشهادة. تأكدي من كتابة الاسم كما هو مسجل.";
 
-    const canvas = await window.html2canvas(exportNode, {
-      scale: 2,
-      backgroundColor: "#fffdf6",
+      statusEl.style.color = "#a33";
+    }
+
+  } catch (error) {
+
+    statusEl.textContent =
+      error.message || "حدث خطأ أثناء البحث. حاولي مرة أخرى.";
+
+    statusEl.style.color = "#a33";
+
+  } finally {
+
+    searchBtn.disabled = false;
+
+  }
+}
+
+
+searchBtn.addEventListener("click", findCertificate);
+
+nameInput.addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    findCertificate();
+  }
+});
+
+
+/* تحميل PDF مباشرة دون نافذة الطباعة */
+
+downloadBtn.addEventListener("click", async function() {
+
+  const oldText = downloadBtn.textContent;
+
+  try {
+
+    if (!window.htmlToImage || !window.jspdf) {
+      throw new Error("مكتبات تحميل PDF لم يتم تحميلها. أعيدي تحديث الصفحة.");
+    }
+
+    downloadBtn.disabled = true;
+    downloadBtn.textContent = "جارٍ تجهيز الشهادة...";
+
+    await document.fonts.ready;
+
+    const canvas = await htmlToImage.toCanvas(certificate, {
       width: 1122,
       height: 794,
-      windowWidth: 1200,
-      windowHeight: 900,
-      scrollX: 0,
-      scrollY: 0,
-      useCORS: true,
-      logging: false
+      pixelRatio: 2,
+      backgroundColor: "#ffffff",
+      style: {
+        width: "1122px",
+        height: "794px",
+        maxWidth: "none",
+        aspectRatio: "auto",
+        display: "block",
+        margin: "0",
+        transform: "none"
+      }
     });
 
-    if (!canvas.width || !canvas.height) {
-      throw new Error("لم يتم إنشاء صورة الشهادة. أعيدي المحاولة.");
-    }
+    const image = canvas.toDataURL("image/jpeg", 0.98);
 
-    const imageData = canvas.toDataURL("image/jpeg", 0.98);
-    const PDF = window.jspdf.jsPDF;
-    const pdf = new PDF({
+    const { jsPDF } = window.jspdf;
+
+    const pdf = new jsPDF({
       orientation: "landscape",
       unit: "mm",
       format: "a4",
       compress: true
     });
 
-    // صورة واحدة داخل صفحة واحدة لمنع ظهور صفحات فارغة
-    pdf.addImage(imageData, "JPEG", 0, 0, 297, 210, undefined, "FAST");
-    pdf.save(`شهادة-${studentName}.pdf`);
+    pdf.addImage(
+      image,
+      "JPEG",
+      0,
+      0,
+      297,
+      210
+    );
 
-    showMessage("تم تجهيز الشهادة للتحميل.", true);
+    pdf.save("شهادة-الحاسب-الآلي.pdf");
+
   } catch (error) {
-    console.error("PDF download error:", error);
-    showMessage("تعذر تحميل الشهادة: " + (error && error.message ? error.message : "حاولي مرة أخرى."));
+
+    console.error("PDF error:", error);
+
+    alert(
+      "حصلت مشكلة أثناء تحميل الشهادة: " +
+      (error.message || "حاولي مرة أخرى")
+    );
+
   } finally {
-    if (exportStage) exportStage.remove();
-    button.disabled = false;
-    button.textContent = "تحميل الشهادة PDF";
+
+    downloadBtn.disabled = false;
+    downloadBtn.textContent = oldText;
+
   }
+
 });
 
-document.addEventListener("contextmenu", function(event) {
-  event.preventDefault();
-});
 </script>
+
 </body>
 </html>
