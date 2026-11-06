@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10283f">
+<title>شهادات التميز والتقدير</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;700;800&family=Reem+Kufi:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#10283f;--navy2:#193c59;--gold:#bd984d;--gold2:#e4ca86;--ink:#263344;--muted:#687789;--paper:#fffdf6;--line:#e6dcc3;--bg:#edf1f5;--white:#fff;--danger:#a33333;--success:#22664b}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#f8fafc 0,#edf1f5 65%);color:var(--ink);font-family:"Cairo",sans-serif;min-height:100vh;padding:34px 16px 56px}
+.wrap{width:min(100%,900px);margin:auto;display:grid;gap:22px}
+header{text-align:center;padding:8px 12px 2px}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;color:#947332;font-size:13px;font-weight:800;letter-spacing:.04em}
+.eyebrow:before,.eyebrow:after{content:"";width:28px;height:1px;background:var(--gold)}
+h1{font-family:"Reem Kufi","Cairo",sans-serif;color:var(--navy);font-size:clamp(27px,5vw,42px);line-height:1.35;margin:8px 0}
+.lead{color:var(--muted);margin:0}
+.panel{background:var(--white);border:1px solid #e0e6ec;border-radius:20px;padding:clamp(18px,4vw,30px);box-shadow:0 14px 38px #193c5910}
+.form-title{font-weight:800;color:var(--navy);margin:0 0 14px}
+label{display:block;font-weight:700;font-size:14px;margin-bottom:7px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.field input{width:100%;height:51px;border:1px solid #d7dfe7;border-radius:11px;background:#f9fbfd;padding:0 14px;font:inherit;color:var(--ink);outline:none;transition:.2s}
+.field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #bd984d22}
+.actions{display:flex;gap:10px;margin-top:16px}
+button{font:inherit;cursor:pointer}
+.primary,.secondary{border:0;border-radius:11px;padding:12px 22px;font-weight:800;transition:transform .15s,opacity .15s}
+.primary{background:linear-gradient(135deg,var(--navy),var(--navy2));color:white;box-shadow:0 7px 16px #10283f25;flex:1}
+.secondary{background:#f3f5f7;color:var(--navy);border:1px solid #dfe5eb}
+button:hover{transform:translateY(-1px)}button:disabled{opacity:.55;cursor:wait;transform:none}
+.message{min-height:25px;margin:12px 0 0;font-size:14px;font-weight:700;color:var(--danger)}
+.message.ok{color:var(--success)}
+.hint{color:var(--muted);font-size:12px;margin:10px 0 0}
+.certificate{--scale:1;position:relative;overflow:hidden;display:none;aspect-ratio:297/210;background:var(--paper);padding:5.5% 8%;color:#3d321f;box-shadow:0 18px 48px #10283f24}
+.certificate.show{display:block}
+.frame{position:absolute;inset:2.2%;border:2px solid var(--gold);pointer-events:none}
+.frame:before{content:"";position:absolute;inset:7px;border:1px solid #d9c38e}
+.frame:after{content:"";position:absolute;inset:15px;border:1px dashed #d9c38e}
+.corner{position:absolute;width:82px;height:82px;border-color:var(--gold);border-style:solid;z-index:1}
+.tl{top:2.2%;left:2.2%;border-width:3px 0 0 3px}.tr{top:2.2%;right:2.2%;border-width:3px 3px 0 0}
+.bl{bottom:2.2%;left:2.2%;border-width:0 0 3px 3px}.br{bottom:2.2%;right:2.2%;border-width:0 3px 3px 0}
+.cert-inner{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center}
+.cert-kicker{font-size:clamp(9px,1.3vw,15px);color:#8d7138;font-weight:700;letter-spacing:.12em}
+.cert-title{font-family:"Amiri",serif;font-size:clamp(28px,5.5vw,58px);line-height:1.05;color:var(--navy);margin:3px 0 0}
+.gold-rule{display:flex;align-items:center;gap:12px;width:min(42%,250px);margin:7px auto}
+.gold-rule:before,.gold-rule:after{content:"";height:1px;background:var(--gold);flex:1}
+.gold-rule span{width:8px;height:8px;background:var(--gold);transform:rotate(45deg)}
+.present{font-family:"Amiri",serif;font-size:clamp(13px,2vw,21px);margin:0;color:#796744}
+.student-name{font-family:"Amiri",serif;font-weight:700;font-size:clamp(24px,4.7vw,48px);color:#8b6726;margin:1px 0 0;padding:0 16px 5px;border-bottom:1px solid var(--gold);max-width:90%;overflow-wrap:anywhere}
+.reason{font-family:"Amiri",serif;font-size:clamp(13px,2vw,21px);line-height:1.6;margin:0;max-width:82%}
+.cert-bottom{width:100%;display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:12px;margin-top:5px}
+.sign{font-family:"Cairo",sans-serif;font-size:clamp(9px,1.35vw,14px);color:#5e5138}
+.sign strong{display:block;border-top:1px solid var(--gold);padding-top:5px;margin-top:7px;font-size:clamp(10px,1.5vw,15px);color:var(--navy)}
+.medal{width:clamp(54px,9vw,90px);height:clamp(54px,9vw,90px);border:4px double var(--gold);outline:1px solid #d8c18b;outline-offset:4px;border-radius:50%;display:grid;place-content:center;color:#a17a2e;background:radial-gradient(circle,#fff8df,#f0dfad);font-size:clamp(9px,1.5vw,15px);font-weight:800;line-height:1.35}
+.meta{font-size:clamp(8px,1.2vw,12px);color:#8b7957;margin-top:6px}
+.cert-code{font-weight:800;letter-spacing:.06em;color:#6e592e}
+.pdf-row{display:none;text-align:center}.pdf-row.show{display:block}
+.pdf{background:var(--gold);color:#fff;border:0;border-radius:11px;padding:12px 25px;font-weight:800}
+.foot{text-align:center;color:#8793a0;font-size:12px}
+@media(max-width:620px){.fields{grid-template-columns:1fr}.actions{flex-direction:column}.certificate{padding:5% 7%}.corner{width:38px;height:38px}.cert-bottom{gap:5px}.reason{max-width:95%}}
+@media print{
+ @page{size:A4 landscape;margin:0}
+ html,body{width:297mm;height:210mm;margin:0;padding:0;background:white!important}
+ body{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+ header,.panel,.pdf-row,.foot{display:none!important}
+ .wrap{display:block;width:297mm;height:210mm;margin:0}
+ .certificate,.certificate.show{display:block!important;width:297mm;height:210mm;aspect-ratio:auto;box-shadow:none;margin:0;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+ <header>
+  <div class="eyebrow">التميز يستحق التقدير</div>
+  <h1>شهادات التميز والتقدير</h1>
+  <p class="lead">تهانينا لأبنائنا الطلاب الحاصلين على الدرجة النهائية</p>
+ </header>
+
+ <section class="panel" aria-label="البحث عن الشهادة">
+  <p class="form-title">ابحث عن شهادتك</p>
+  <form id="lookupForm" autocomplete="off">
+   <div class="fields">
+    <div class="field"><label for="studentName">اسم الطالب الثلاثي</label><input id="studentName" name="studentName" type="text" placeholder="اكتب اسمك الثلاثي كما هو مسجل" required maxlength="100" autocomplete="name"></div>
+   </div>
+   <div class="actions"><button class="primary" id="searchBtn" type="submit">عرض الشهادة</button><button class="secondary" id="clearBtn" type="button">مسح البيانات</button></div>
+   <p class="message" id="message" role="status" aria-live="polite"></p>
+   <p class="hint">اكتبي الاسم الثلاثي كاملًا كما تم تسجيله.</p>
+  </form>
+ </section>
+
+ <section class="certificate" id="certificate" aria-label="شهادة تقدير">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="cert-inner">
+   <div>
+    <div class="cert-kicker">شهادة استحقاق وتميّز</div>
+    <h2 class="cert-title">شهادة تقدير</h2>
+    <div class="gold-rule"><span></span></div>
+    <p class="present">تُمنح هذه الشهادة إلى الطالب / الطالبة</p>
+    <p class="student-name" id="certName"></p>
+   </div>
+   <p class="reason" id="certReason"></p>
+   <div class="cert-bottom">
+    <div class="sign"><span id="issueDate"></span><strong>تاريخ الإصدار</strong><div class="meta"></div></div>
+    <div class="medal">★<br>الدرجة<br>النهائية</div>
+    <div class="sign"><span id="teacherName"></span><strong>توقيع المعلمة</strong></div>
+   </div>
+  </div>
+ </section>
+ <div class="pdf-row" id="pdfRow"><button class="pdf" id="printBtn" type="button">طباعة الشهادة / حفظ PDF</button></div>
+ <div class="foot">مع أطيب التمنيات بدوام النجاح والتفوق</div>
+</main>
+<script>
+"use strict";
+
+/* إعدادات الاتصال: المفتاح Publishable مخصص للواجهة الأمامية.
+   لا تضعي هنا أبدًا Secret Key أو service_role. */
+const SUPABASE_URL = "https://yisgyqozrsjbylpumjox.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IOPSc-va9Y20fcE7HQHKEQ_8HCI_4jn";
+const LOOKUP_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/lookup-certificate`;
+
+const CONFIG = {
+  exam: "امتحان شهر أكتوبر",
+  subject: "الحاسب الآلي",
+  term: "أكتوبر",
+  year: "٢٠٢٦",
+  teacher: "م. أسماء مجدي"
+};
+
+// لا توجد أسماء طلاب داخل هذا الملف؛ البحث يتم من خلال Supabase Edge Function.
+const $ = id => document.getElementById(id);
+const form = $("lookupForm");
+const message = $("message");
+const certificate = $("certificate");
+const pdfRow = $("pdfRow");
+const searchBtn = $("searchBtn");
+
+function normalizeName(value) {
+  return String(value).normalize("NFC")
+    .replace(/[ً-ٰٟـ]/g, "")
+    .replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه")
+    .replace(/\s+/g, " ").trim().toLowerCase();
+}
+function safeText(id, value) { $(id).textContent = value; }
+function hideCertificate() {
+  certificate.classList.remove("show");
+  pdfRow.classList.remove("show");
+}
+function showMessage(text, success=false) {
+  message.textContent = text;
+  message.classList.toggle("ok", success);
+}
+function hideMessage() { showMessage(""); }
+
+let failures = 0;
+let lockUntil = 0;
+try {
+  const state = JSON.parse(sessionStorage.getItem("certificate-attempts") || "{}");
+  failures = Number(state.failures) || 0;
+  lockUntil = Number(state.lockUntil) || 0;
+} catch (_) {}
+
+function saveAttemptState() {
+  try { sessionStorage.setItem("certificate-attempts", JSON.stringify({failures, lockUntil})); } catch (_) {}
+}
+
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+  hideCertificate();
+  hideMessage();
+
+  if (Date.now() < lockUntil) {
+    showMessage("تم إيقاف المحاولة مؤقتًا. انتظري قليلًا ثم حاولي مرة أخرى.");
+    return;
+  }
+
+  const enteredName = $("studentName").value.trim().replace(/\s+/g, " ");
+  if (!enteredName) {
+    showMessage("من فضلك اكتبي الاسم الثلاثي.");
+    return;
+  }
+  if (enteredName.length > 100) {
+    showMessage("الاسم أطول من المسموح. راجعي الاسم وحاولي مرة أخرى.");
+    return;
+  }
+
+  searchBtn.disabled = true;
+  searchBtn.textContent = "جارٍ التحقق…";
+
+  try {
+    const response = await fetch(LOOKUP_FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_PUBLISHABLE_KEY
+      },
+      body: JSON.stringify({ name: enteredName })
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (response.status === 404) {
+      failures++;
+      if (failures >= 5) lockUntil = Date.now() + Math.min(30000 * (failures - 4), 300000);
+      saveAttemptState();
+      showMessage("لم يتم العثور على شهادة بهذا الاسم. راجعي كتابة الاسم الثلاثي.");
+      return;
+    }
+
+    if (!response.ok) throw new Error("تعذر التحقق من الشهادة الآن.");
+
+    const studentName = result?.student?.name;
+    if (!studentName) throw new Error("استجابة التحقق غير مكتملة.");
+
+    failures = 0;
+    lockUntil = 0;
+    saveAttemptState();
+
+    safeText("certName", studentName);
+    safeText("certReason", `وذلك تقديرًا لتحقيق الدرجة النهائية في مادة ${CONFIG.subject} — ${CONFIG.exam} (${CONFIG.term} ${CONFIG.year})`);
+    safeText("teacherName", CONFIG.teacher);
+    safeText("issueDate", new Intl.DateTimeFormat("ar-EG", {day:"numeric",month:"long",year:"numeric"}).format(new Date()));
+
+    certificate.classList.add("show");
+    pdfRow.classList.add("show");
+    showMessage("تم التحقق بنجاح. مبارك التفوق!", true);
+    certificate.scrollIntoView({behavior:"smooth", block:"center"});
+  } catch (error) {
+    showMessage(error.message || "حدث خطأ في الاتصال. حاولي مرة أخرى.");
+  } finally {
+    searchBtn.disabled = false;
+    searchBtn.textContent = "عرض الشهادة";
+  }
+});
+
+$("clearBtn").addEventListener("click", () => {
+  form.reset();
+  hideCertificate();
+  hideMessage();
+  $("studentName").focus();
+});
+
+$("printBtn").addEventListener("click", () => {
+  if (!certificate.classList.contains("show")) return;
+  window.print();
+});
+</script>
+</body>
+</html>
