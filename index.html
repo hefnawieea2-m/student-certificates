@@ -190,7 +190,7 @@ button:hover{transform:translateY(-1px)}button:disabled{opacity:.55;cursor:wait;
  <div class="pdf-row" id="pdfRow"><button class="pdf" id="printBtn" type="button">تحميل الشهادة PDF</button></div>
  <div class="foot">مع أطيب التمنيات بدوام النجاح والتفوق</div>
 </main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 "use strict";
@@ -322,23 +322,25 @@ $("printBtn").addEventListener("click", async () => {
 
   const button = $("printBtn");
   const studentName = $("certName").textContent.trim() || "student";
+  let exportNode = null;
   let exportStage = null;
 
   button.disabled = true;
   button.textContent = "جارٍ تجهيز الشهادة...";
 
   try {
-    if (!window.htmlToImage || typeof window.htmlToImage.toCanvas !== "function") {
-      throw new Error("مكتبة تجهيز الشهادة لم تُحمّل. تأكدي من الإنترنت ثم حدّثي الصفحة.");
+    if (typeof window.html2canvas !== "function") {
+      throw new Error("تعذر تحميل مكتبة تصوير الشهادة. تأكدي من الإنترنت ثم أعيدي تحميل الصفحة.");
     }
     if (!window.jspdf || typeof window.jspdf.jsPDF !== "function") {
-      throw new Error("مكتبة PDF لم تُحمّل. تأكدي من الإنترنت ثم حدّثي الصفحة.");
+      throw new Error("تعذر تحميل مكتبة إنشاء PDF. تأكدي من الإنترنت ثم أعيدي تحميل الصفحة.");
     }
 
-    // انتظري اكتمال تحميل الخطوط العربية قبل إنشاء النسخة النهائية.
-    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    if (document.fonts && document.fonts.ready) {
+      await document.fonts.ready;
+    }
 
-    // مساحة تصدير ثابتة وموجودة داخل الصفحة لتفادي مشاكل العناصر خارج الشاشة.
+    // مساحة تصدير ثابتة لا تتأثر بعرض شاشة الهاتف أو الكمبيوتر
     exportStage = document.createElement("div");
     Object.assign(exportStage.style, {
       position: "fixed",
@@ -353,8 +355,9 @@ $("printBtn").addEventListener("click", async () => {
       pointerEvents: "none"
     });
 
-    const exportNode = certificate.cloneNode(true);
+    exportNode = certificate.cloneNode(true);
     exportNode.classList.add("show");
+
     Object.assign(exportNode.style, {
       display: "block",
       position: "relative",
@@ -375,10 +378,9 @@ $("printBtn").addEventListener("click", async () => {
       transform: "none"
     });
 
-    // تثبيت أحجام عناصر الشهادة لتكون النتيجة واحدة على الهاتف والكمبيوتر.
+    // تثبيت أحجام الخطوط حتى لا يتغير شكل الشهادة على الهاتف
     const fixedStyles = [
-      [".cert-kicker", {fontSize:"20px", letterSpacing:"normal", wordSpacing:"normal", whiteSpace:"nowrap", direction:"rtl", textAlign:"center", fontFamily:"Cairo, sans-serif"}],
-      [".cert-kicker-svg", {width:"440px", height:"48px"}],
+      [".cert-kicker", {fontSize:"20px", letterSpacing:"normal", wordSpacing:"normal", whiteSpace:"nowrap", direction:"rtl", textAlign:"center", fontFamily:"Cairo, sans-serif", padding:"4px 24px", borderTop:"1px solid rgba(189,152,77,.65)", borderBottom:"1px solid rgba(189,152,77,.65)"}],
       [".cert-title", {fontSize:"58px", lineHeight:"1.05"}],
       [".present", {fontSize:"23px"}],
       [".student-name", {fontSize:"50px", maxWidth:"90%"}],
@@ -388,32 +390,39 @@ $("printBtn").addEventListener("click", async () => {
       [".medal", {width:"90px", height:"90px", fontSize:"15px"}],
       [".corner", {width:"82px", height:"82px"}]
     ];
+
     fixedStyles.forEach(([selector, styles]) => {
-      exportNode.querySelectorAll(selector).forEach(element => Object.assign(element.style, styles));
+      exportNode.querySelectorAll(selector).forEach(element => {
+        Object.assign(element.style, styles);
+      });
     });
 
     exportStage.appendChild(exportNode);
     document.body.appendChild(exportStage);
 
-    // ننتظر اكتمال الرسم قبل التصوير.
-    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    // انتظار دورة رسم حتى يكتمل ظهور النصوص والحدود
+    await new Promise(resolve => requestAnimationFrame(() =>
+      requestAnimationFrame(resolve)
+    ));
 
-    // html-to-image يلتقط DOM عبر SVG foreignObject بدل إعادة بناء الحروف بـ html2canvas.
-    // هذا يحافظ عادةً على تشكيل واتصال الحروف العربية كما يعرضها المتصفح.
-    const canvas = await window.htmlToImage.toCanvas(exportNode, {
+    const canvas = await window.html2canvas(exportNode, {
+      scale: 2,
+      backgroundColor: "#fffdf6",
       width: 1122,
       height: 794,
-      pixelRatio: 2,
-      backgroundColor: "#fffdf6",
-      cacheBust: true,
-      skipAutoScale: true
+      windowWidth: 1200,
+      windowHeight: 900,
+      scrollX: 0,
+      scrollY: 0,
+      useCORS: true,
+      logging: false
     });
 
-    if (!canvas || !canvas.width || !canvas.height) {
+    if (!canvas.width || !canvas.height) {
       throw new Error("لم يتم إنشاء صورة الشهادة. أعيدي المحاولة.");
     }
 
-    const imageData = canvas.toDataURL("image/jpeg", 0.96);
+    const imageData = canvas.toDataURL("image/jpeg", 0.98);
     const PDF = window.jspdf.jsPDF;
     const pdf = new PDF({
       orientation: "landscape",
@@ -421,14 +430,15 @@ $("printBtn").addEventListener("click", async () => {
       format: "a4",
       compress: true
     });
-    pdf.addImage(imageData, "JPEG", 0, 0, 297, 210, undefined, "FAST");
 
-    const safeName = studentName.replace(/[\\/:*?"<>|]/g, "-").slice(0, 70) || "الطالب";
-    pdf.save(`شهادة-${safeName}.pdf`);
-    showMessage("تم إنشاء ملف الشهادة. على الهاتف اختاري حفظ في الملفات إذا ظهرت معاينة PDF.", true);
+    // صورة واحدة داخل صفحة واحدة لمنع ظهور صفحات فارغة
+    pdf.addImage(imageData, "JPEG", 0, 0, 297, 210, undefined, "FAST");
+    pdf.save(`شهادة-${studentName}.pdf`);
+
+    showMessage("تم تجهيز الشهادة للتحميل.", true);
   } catch (error) {
     console.error("PDF download error:", error);
-    showMessage("تعذر تحميل الشهادة: " + (error && error.message ? error.message : "تحققي من الاتصال بالإنترنت ثم حاولي مرة أخرى."));
+    showMessage("تعذر تحميل الشهادة: " + (error && error.message ? error.message : "حاولي مرة أخرى."));
   } finally {
     if (exportStage) exportStage.remove();
     button.disabled = false;
