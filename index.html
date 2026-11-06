@@ -108,9 +108,10 @@ button:hover{transform:translateY(-1px)}button:disabled{opacity:.55;cursor:wait;
    </div>
   </div>
  </section>
- <div class="pdf-row" id="pdfRow"><button class="pdf" id="printBtn" type="button">طباعة الشهادة / حفظ PDF</button></div>
+ <div class="pdf-row" id="pdfRow"><button class="pdf" id="printBtn" type="button">تحميل الشهادة PDF</button></div>
  <div class="foot">مع أطيب التمنيات بدوام النجاح والتفوق</div>
 </main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
 "use strict";
 
@@ -241,9 +242,42 @@ $("clearBtn").addEventListener("click", () => {
   $("studentName").focus();
 });
 
-$("printBtn").addEventListener("click", () => {
+$("printBtn").addEventListener("click", async () => {
   if (!certificate.classList.contains("show")) return;
-  window.print();
+
+  const button = $("printBtn");
+  const studentName = $("certName").textContent.trim() || "student";
+  button.disabled = true;
+  button.textContent = "جارٍ تجهيز الشهادة…";
+
+  try {
+    if (document.fonts && document.fonts.ready) {
+      await document.fonts.ready;
+    }
+
+    const options = {
+      margin: 0,
+      filename: `شهادة-${studentName}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#fffdf6"
+      },
+      jsPDF: {
+        unit: "mm",
+        format: "a4",
+        orientation: "landscape"
+      }
+    };
+
+    await html2pdf().set(options).from(certificate).save();
+  } catch (error) {
+    showMessage("تعذر تحميل الشهادة. تأكدي من الاتصال بالإنترنت ثم حاولي مرة أخرى.");
+  } finally {
+    button.disabled = false;
+    button.textContent = "تحميل الشهادة PDF";
+  }
 });
 
 document.addEventListener("contextmenu", function(event) {
