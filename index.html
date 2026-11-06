@@ -247,4 +247,10 @@ $("printBtn").addEventListener("click", () => {
 });
 </script>
 </body>
+ <script>
+  // منع قائمة كليك يمين
+  document.addEventListener("contextmenu", function(event) {
+    event.preventDefault();
+  });
+</script>
 </html>
