@@ -233,7 +233,7 @@ $("clearBtn").addEventListener("click", () => {
   $("studentName").focus();
 });
 
-/* تحميل الشهادة كملف PDF مباشرة دون فتح نافذة الطباعة */
+/* تحميل العنصر الظاهر نفسه لتجنب إنشاء نسخة قد تظهر فارغة في PDF */
 $("printBtn").addEventListener("click", async () => {
   if (!certificate.classList.contains("show")) {
     showMessage("اعرضي الشهادة أولًا.");
@@ -243,69 +243,56 @@ $("printBtn").addEventListener("click", async () => {
   const button = $("printBtn");
   const studentName = $("certName").textContent.trim() || "student";
   button.disabled = true;
-  button.textContent = "جارٍ تحميل الشهادة...";
+  button.textContent = "جارٍ تجهيز الشهادة...";
 
   try {
     if (typeof html2pdf !== "function") {
-      throw new Error("مكتبة PDF لم تعمل. تأكدي من اتصال الإنترنت ثم أعيدي تحميل الصفحة.");
+      throw new Error("مكتبة PDF لم تعمل. تأكدي من اتصال الإنترنت.");
     }
 
     if (document.fonts && document.fonts.ready) {
       await document.fonts.ready;
     }
 
-    const exportNode = certificate.cloneNode(true);
-    exportNode.classList.add("show");
+    // انتظري اكتمال تحديث تخطيط الشهادة قبل تصويرها
+    await new Promise(resolve => requestAnimationFrame(() =>
+      requestAnimationFrame(resolve)
+    ));
 
-    Object.assign(exportNode.style, {
-      display: "block",
-      position: "fixed",
-      left: "0",
-      top: "0",
-      width: "1122px",
-      height: "794px",
-      aspectRatio: "auto",
-      margin: "0",
-      padding: "62px 90px",
-      boxShadow: "none",
-      background: "#fffdf6",
-      zIndex: "99999"
-    });
-
-    document.body.appendChild(exportNode);
-
-    try {
-      await html2pdf()
-        .set({
-          margin: 0,
-          filename: `شهادة-${studentName}.pdf`,
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: {
-            scale: 2,
-            width: 1122,
-            height: 794,
-            windowWidth: 1200,
-            useCORS: true,
-            backgroundColor: "#fffdf6",
-            logging: false
-          },
-          jsPDF: {
-            unit: "mm",
-            format: "a4",
-            orientation: "landscape"
-          },
-          pagebreak: { mode: ["avoid-all"] }
-        })
-        .from(exportNode)
-        .save();
-    } finally {
-      exportNode.remove();
+    const rect = certificate.getBoundingClientRect();
+    if (!rect.width || !rect.height) {
+      throw new Error("الشهادة غير ظاهرة. اعرضي الشهادة أولًا ثم حاولي التحميل.");
     }
+
+    await html2pdf()
+      .set({
+        margin: 0,
+        filename: `شهادة-${studentName}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: "#fffdf6",
+          logging: true,
+          scrollX: 0,
+          scrollY: 0,
+          windowWidth: Math.max(document.documentElement.clientWidth, Math.ceil(rect.right)),
+          windowHeight: Math.max(document.documentElement.clientHeight, Math.ceil(rect.bottom))
+        },
+        jsPDF: {
+          unit: "mm",
+          format: "a4",
+          orientation: "landscape"
+        },
+        pagebreak: { mode: ["avoid-all"] }
+      })
+      .from(certificate)
+      .save();
 
     showMessage("تم تجهيز الشهادة للتحميل.", true);
   } catch (error) {
     console.error("PDF download error:", error);
-    showMessage("تعذر تحميل الشهادة: " + (error?.message || "حاولي مرة أخرى."));
+    showMessage("تعذر تحميل الشهادة: " + (error && error.message ? error.message : "حاولي مرة أخرى."));
   } finally {
     button.disabled = false;
     button.textContent = "تحميل الشهادة PDF";
