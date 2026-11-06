@@ -255,52 +255,56 @@ $("printBtn").addEventListener("click", async () => {
       await document.fonts.ready;
     }
 
-    // Create a fixed-size copy so the PDF renderer does not capture a
-    // responsive/hidden layout or a zero-sized certificate.
+    if (typeof html2pdf !== "function") {
+      throw new Error("مكتبة تحميل PDF لم تعمل. تأكدي من اتصال الإنترنت ثم أعيدي تحميل الصفحة.");
+    }
+
+    // نسخة مستقلة بمقاس ثابت حتى لا تتأثر بتنسيق الهاتف أو الشاشة.
     const exportNode = certificate.cloneNode(true);
     exportNode.classList.add("show");
-    exportNode.style.display = "block";
-    exportNode.style.position = "fixed";
-    exportNode.style.left = "-12000px";
-    exportNode.style.top = "0";
-    exportNode.style.width = "1122px";
-    exportNode.style.height = "794px";
-    exportNode.style.aspectRatio = "auto";
-    exportNode.style.margin = "0";
-    exportNode.style.padding = "62px 90px";
-    exportNode.style.boxShadow = "none";
-    exportNode.style.background = "#fffdf6";
+    Object.assign(exportNode.style, {
+      display: "block",
+      position: "fixed",
+      left: "0",
+      top: "0",
+      width: "1122px",
+      height: "794px",
+      aspectRatio: "auto",
+      margin: "0",
+      padding: "62px 90px",
+      boxShadow: "none",
+      background: "#fffdf6",
+      zIndex: "99999"
+    });
     document.body.appendChild(exportNode);
 
     try {
-      const canvas = await html2canvas(exportNode, {
-        scale: 2,
-        width: 1122,
-        height: 794,
-        windowWidth: 1200,
-        windowHeight: 900,
-        useCORS: true,
-        backgroundColor: "#fffdf6",
-        logging: false
-      });
-
-      if (!canvas.width || !canvas.height) {
-        throw new Error("تعذر تجهيز صورة الشهادة.");
-      }
-
-      const imageData = canvas.toDataURL("image/jpeg", 0.98);
-      const pdf = new window.jspdf.jsPDF({
-        orientation: "landscape",
-        unit: "mm",
-        format: "a4"
-      });
-      pdf.addImage(imageData, "JPEG", 0, 0, 297, 210);
-      pdf.save(`شهادة-${studentName}.pdf`);
+      await html2pdf().set({
+        margin: 0,
+        filename: `شهادة-${studentName}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          width: 1122,
+          height: 794,
+          windowWidth: 1200,
+          useCORS: true,
+          backgroundColor: "#fffdf6",
+          logging: false
+        },
+        jsPDF: {
+          unit: "mm",
+          format: "a4",
+          orientation: "landscape"
+        },
+        pagebreak: { mode: ["avoid-all"] }
+      }).from(exportNode).save();
     } finally {
       exportNode.remove();
     }
   } catch (error) {
-    showMessage("تعذر تحميل الشهادة. تأكدي من الاتصال بالإنترنت ثم حاولي مرة أخرى.");
+    console.error("PDF download error:", error);
+    showMessage(error?.message || "تعذر تحميل الشهادة. تأكدي من الاتصال بالإنترنت ثم حاولي مرة أخرى.");
   } finally {
     button.disabled = false;
     button.textContent = "تحميل الشهادة PDF";
