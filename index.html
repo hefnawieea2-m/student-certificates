@@ -123,6 +123,11 @@ button:hover{transform:translateY(-1px)}button:disabled{opacity:.55;cursor:wait;
   box-shadow:0 3px 10px rgba(117,87,35,.12),inset 0 0 0 4px rgba(255,255,255,.38);
 }
 .sign strong{color:#193c59}
+
+.cert-kicker{letter-spacing:normal!important;word-spacing:normal!important}
+.cert-kicker-svg{display:block;width: min(440px, 100%);height:48px;overflow:visible;letter-spacing:normal}
+.cert-kicker-svg text{letter-spacing:normal;word-spacing:normal}
+
 @media(max-width:620px){
   .corner{width:42px;height:42px}
   .student-name{min-width:55%;padding:4px 10px 6px}
@@ -164,7 +169,11 @@ button:hover{transform:translateY(-1px)}button:disabled{opacity:.55;cursor:wait;
   <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
   <div class="cert-inner">
    <div>
-    <div class="cert-kicker">شهادة استحقاق وتميّز</div>
+    <div class="cert-kicker" aria-label="شهادة استحقاق وتميّز">
+      <svg class="cert-kicker-svg" xmlns="http://www.w3.org/2000/svg" width="440" height="48" viewBox="0 0 440 48" role="img" aria-label="شهادة استحقاق وتميّز">
+       <text x="220" y="33" text-anchor="middle" direction="rtl" unicode-bidi="plaintext" font-family="Cairo, sans-serif" font-size="22" font-weight="700" fill="#86672e">شهادة استحقاق وتميّز</text>
+      </svg>
+    </div>
     <h2 class="cert-title">شهادة تقدير</h2>
     <div class="gold-rule"><span></span></div>
     <p class="present">تُمنح هذه الشهادة إلى الطالب / الطالبة</p>
@@ -371,7 +380,7 @@ $("printBtn").addEventListener("click", async () => {
 
     // تثبيت أحجام الخطوط حتى لا يتغير شكل الشهادة على الهاتف
     const fixedStyles = [
-      [".cert-kicker", {fontSize:"20px", letterSpacing:"0", wordSpacing:"0", whiteSpace:"nowrap", direction:"rtl", textAlign:"center", fontFamily:"Cairo, sans-serif", padding:"4px 24px", borderTop:"1px solid rgba(189,152,77,.65)", borderBottom:"1px solid rgba(189,152,77,.65)"}],
+      [".cert-kicker", {fontSize:"20px", letterSpacing:"normal", wordSpacing:"normal", whiteSpace:"nowrap", direction:"rtl", textAlign:"center", fontFamily:"Cairo, sans-serif", padding:"4px 24px", borderTop:"1px solid rgba(189,152,77,.65)", borderBottom:"1px solid rgba(189,152,77,.65)"}],
       [".cert-title", {fontSize:"58px", lineHeight:"1.05"}],
       [".present", {fontSize:"23px"}],
       [".student-name", {fontSize:"50px", maxWidth:"90%"}],
