@@ -255,23 +255,50 @@ $("printBtn").addEventListener("click", async () => {
       await document.fonts.ready;
     }
 
-    const options = {
-      margin: 0,
-      filename: `شهادة-${studentName}.pdf`,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#fffdf6"
-      },
-      jsPDF: {
-        unit: "mm",
-        format: "a4",
-        orientation: "landscape"
-      }
-    };
+    // Create a fixed-size copy so the PDF renderer does not capture a
+    // responsive/hidden layout or a zero-sized certificate.
+    const exportNode = certificate.cloneNode(true);
+    exportNode.classList.add("show");
+    exportNode.style.display = "block";
+    exportNode.style.position = "fixed";
+    exportNode.style.left = "-12000px";
+    exportNode.style.top = "0";
+    exportNode.style.width = "1122px";
+    exportNode.style.height = "794px";
+    exportNode.style.aspectRatio = "auto";
+    exportNode.style.margin = "0";
+    exportNode.style.padding = "62px 90px";
+    exportNode.style.boxShadow = "none";
+    exportNode.style.background = "#fffdf6";
+    document.body.appendChild(exportNode);
 
-    await html2pdf().set(options).from(certificate).save();
+    try {
+      const canvas = await html2canvas(exportNode, {
+        scale: 2,
+        width: 1122,
+        height: 794,
+        windowWidth: 1200,
+        windowHeight: 900,
+        useCORS: true,
+        backgroundColor: "#fffdf6",
+        logging: false
+      });
+
+      if (!canvas.width || !canvas.height) {
+        throw new Error("تعذر تجهيز صورة الشهادة.");
+      }
+
+      const imageData = canvas.toDataURL("image/jpeg", 0.98);
+      const pdf = new window.jspdf.jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a4"
+      });
+      pdf.addImage(imageData, "JPEG", 0, 0, 297, 210);
+      pdf.save(`شهادة-${studentName}.pdf`);
+    } finally {
+      exportNode.remove();
+    }
   } catch (error) {
     showMessage("تعذر تحميل الشهادة. تأكدي من الاتصال بالإنترنت ثم حاولي مرة أخرى.");
   } finally {
